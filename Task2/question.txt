@@ -1,0 +1,25 @@
+Schema
+ {"original": 
+	{"m1": datestring, "m2": datestring, "m3": datestring, "m4": datestring, "m5": datestring, "project deadline": datestring},
+"change": 
+	{"mX*": datestring}}
+* X = any of m1,m2,m3,m4,m5
+
+Context
+Consider the object structure shown above in the "Schema" section. The first 5 items of "original" are estimated dates for important milestones of a project and the last one is the project's deadline (meaning no milestones can be after this date). The “change” item indicates which milestone is changing (we’ll call this the “Changed One”), where “mX” is one of m1 to m5 and its value is the date it’s being changed to. In mechanical/electrical engineering projects, estimated dates for milestones change frequently. When a milestone date changes (the "Changed One"), it's necessary for other milestone dates to change as well. In our case, milestone dates are adjusted according to these rules:
+only milestone dates after the Changed One, need to be considered (call them "eligible milestones")
+ eligible milestones should be spaced approximately evenly apart between
+	the Changed One and the project deadline
+eligible milestones can't be adjusted to being on a weekend
+no eligible milestone can be adjusted to be put on the same day as the project deadline
+if the best adjustment of eligible milestones results in no change at all (e.g. when m1 to m5 and project deadline are on sequential days), the project deadline is incremented by one day (and adjustment of eligible milestones is attempted again) until the resulting adjustment, changes (i.e. what's the minimum change to the project deadline that allows the readjustment to no longer be identical)
+
+Question
+The following JSON object is an example input to your program:
+{"original": {"m1": "2023-10-02", "m2": "2023-10-06", "m3": "2023-10-12", "m4": "2023-10-18", "m5": "2023-10-24", "project deadline": "2023-10-30"}, 
+"change": {"m2": "2023-10-09"}}
+
+Write a program that consumes input (which conforms to the Schema) that determines which milestones need to be adjusted, computes their adjusted dates, updates the "original" object with the new dates and returns this as output. Please use one of the following languages: python, ruby, javascript, typescript or go.
+
+Example output:
+{"m1": "2023-10-02", "m2": "2023-10-09", "m3": "2023-10-16", "m4": "2023-10-23", "m5": "2023-10-27", "project deadline": "2023-10-30"}
